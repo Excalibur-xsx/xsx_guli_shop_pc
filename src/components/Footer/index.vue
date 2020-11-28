@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" v-if="!$route.meta.isFooterHide">
     <div class="footer-container">
       <div class="footerList">
         <div class="footerItem">

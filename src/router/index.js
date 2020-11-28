@@ -6,6 +6,21 @@ import Login from "../views/Login"
 import Register from "../views/Register"
 import Search from "../views/Search"
 
+const push = VueRouter.prototype.push
+VueRouter.prototype.push = function (location, onComplete, onAbort) {
+    if (onComplete && onAbort) {
+        return push.call(this, location, onComplete, onAbort);
+    }
+    return push.call(this, location, onComplete, () => { });
+}
+const replace = VueRouter.prototype.replace
+VueRouter.prototype.replace = function (location, onComplete, onAbort) {
+    if (onComplete && onAbort) {
+        return replace.call(this, location, onComplete, onAbort);
+    }
+    return replace.call(this, location, onComplete, () => { });
+}
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -15,15 +30,21 @@ export default new VueRouter({
             component: Home,
         },
         {
-            path: "/Login",
+            path: "/login",
             component: Login,
+            meta: {
+                isFooterHide: true,
+            }
         },
         {
-            path: "/Register",
+            path: "/register",
             component: Register,
+            meta: {
+                isFooterHide: true,
+            }
         },
         {
-            path: "/Search",
+            path: "/search/:searchText?",
             component: Search,
         },
     ],
