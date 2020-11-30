@@ -1,3 +1,4 @@
+// home组件的vuex状态
 import { reqGetBaseCategoryList, reqGetBanners, reqGetFloors } from "@api/home";
 
 export default {

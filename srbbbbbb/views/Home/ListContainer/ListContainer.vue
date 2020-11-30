@@ -16,7 +16,7 @@
             </div>
             <div class="swiper-slide">
               <img src="./images/banner4.jpg" />
-            </div>-->
+            </div> -->
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -34,21 +34,11 @@
           </h4>
           <div class="clearix"></div>
           <ul class="news-list unstyled">
-            <li>
-              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[公告]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[公告]</span>备战开学季 全民半价购数码
-            </li>
-            <li>
-              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-            </li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
+            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
           </ul>
         </div>
         <ul class="lifeservices">
