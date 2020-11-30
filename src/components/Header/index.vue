@@ -31,14 +31,14 @@
         </router-link>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
+        <form class="searchForm" @submit.prevent="search">
           <input
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
             v-model="searchText"
           />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="search">搜索</button>
+          <button class="sui-btn btn-xlarge btn-danger">搜索</button>
         </form>
       </div>
     </div>
@@ -50,62 +50,66 @@ export default {
   name: "Header",
   data() {
     return {
-      //搜索的内容
       searchText: "",
     };
   },
   methods: {
-    /*
-     *搜索功能函数
-     */
     search() {
+      // 获取搜索的数据
       const { searchText } = this;
-      const searchPath = searchText ? `/${searchText}` : "";
-      this.$router.push("/search" + searchPath);
+      // 编程式导航
+      const location = {
+        name: "search",
+      };
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+      }
+      this.$router.push(location);
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  .loginList {
+    float: left;
+
+    p {
+      float: left;
+      margin-right: 10px;
+
+      .register {
+        border-left: 1px solid #b3aeae;
+        padding: 0 5px;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .typeList {
+    float: right;
+
+    a {
+      padding: 0 10px;
+
+      & + a {
+        border-left: 1px solid #b3aeae;
+      }
+    }
+  }
+}
+
 .header {
   & > .top {
     background-color: #eaeaea;
     height: 30px;
     line-height: 30px;
-
-    .container {
-      width: 1200px;
-      margin: 0 auto;
-      overflow: hidden;
-
-      .loginList {
-        float: left;
-
-        p {
-          float: left;
-          margin-right: 10px;
-
-          .register {
-            border-left: 1px solid #b3aeae;
-            padding: 0 5px;
-            margin-left: 5px;
-          }
-        }
-      }
-
-      .typeList {
-        float: right;
-
-        a {
-          padding: 0 10px;
-
-          & + a {
-            border-left: 1px solid #b3aeae;
-          }
-        }
-      }
-    }
   }
 
   & > .bottom {
