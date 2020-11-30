@@ -13,7 +13,7 @@ export default {
   methods: {
     // 测试登录
     login() {
-      reqLogin("13700000000", "11111111")
+      reqLogin("13700000000", "111")
         .then((res) => {
           console.log("res", res);
         })

@@ -55,9 +55,7 @@ export default {
   },
   methods: {
     search() {
-      // 获取搜索的数据
       const { searchText } = this;
-      // 编程式导航
       const location = {
         name: "search",
       };

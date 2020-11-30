@@ -54,7 +54,7 @@
                     </div>
                     <div class="swiper-slide">
                       <img src="./images/floor-1-b03.png">
-                    </div> -->
+                  </div>-->
                 </div>
                 <!-- 如果需要分页器 -->
                 <div class="swiper-pagination"></div>
