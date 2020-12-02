@@ -75,25 +75,34 @@ export default {
   },
   methods: {
     ...mapActions(["getCategoryList"]),
-    // 跳转到search
     goSearch(e) {
       const { categoryname, categoryid, categorytype } = e.target.dataset;
       if (!categoryname) return;
-
       this.isSearchShow = false;
 
-      this.$router.push({
+      const location = {
         name: "search",
         query: {
           categoryName: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
-      });
+      };
+      const { searchText } = this.$route.params;
+
+      if (searchText) {
+        location.params = {
+          searchText,
+        };
+      }
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
   mounted() {
     if (this.categoryList.length) return;
-
     this.getCategoryList();
   },
 };

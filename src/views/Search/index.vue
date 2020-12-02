@@ -13,15 +13,33 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-show="options.keyword" @click="delKeyword">
+              关键词: {{ options.keyword }}
+              <i>×</i>
+            </li>
+            <li class="with-x" v-show="options.categoryName" @click="delCategory">
+              分类名称: {{ options.categoryName }}
+              <i>×</i>
+            </li>
+            <li class="with-x" v-show="options.trademark" @click="delTrademark">
+              品牌: {{ options.trademark.split(":")[1] }}
+              <i>×</i>
+            </li>
+
+            <li
+              class="with-x"
+              v-for="(prop, index) in options.props"
+              :key="prop"
+              @click="delProp(index)"
+            >
+              {{ prop.split(":")[2] }}: {{ prop.split(":")[1] }}
+              <i>×</i>
+            </li>
           </ul>
         </div>
 
         <!-- 选择商品的类别 -->
-        <SearchSelector />
+        <SearchSelector :addTrademark="addTrademark" @add-prop="addProp" />
 
         <!-- 商品列表导航 -->
         <div class="details clearfix">
@@ -55,9 +73,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="goods.defaultImg"
-                    /></a>
+                    <a href="item.html" target="_blank">
+                      <img :src="goods.defaultImg" />
+                    </a>
                   </div>
                   <div class="price">
                     <strong>
@@ -70,22 +88,21 @@
                       target="_blank"
                       href="item.html"
                       title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    >{{ goods.title }}</a>
                   </div>
                   <div class="commit">
-                    <i class="command">已有<span>2000</span>人评价</i>
+                    <i class="command">
+                      已有
+                      <span>2000</span>人评价
+                    </i>
                   </div>
                   <div class="operate">
                     <a
                       href="success-cart.html"
                       target="_blank"
                       class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
-                    >
-                    <a href="javascript:void(0);" class="sui-btn btn-bordered"
-                      >收藏</a
-                    >
+                    >加入购物车</a>
+                    <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
               </li>
@@ -113,12 +130,16 @@
                 <li>
                   <a href="#">5</a>
                 </li>
-                <li class="dotted"><span>...</span></li>
+                <li class="dotted">
+                  <span>...</span>
+                </li>
                 <li class="next">
                   <a href="#">下一页»</a>
                 </li>
               </ul>
-              <div><span>共10页&nbsp;</span></div>
+              <div>
+                <span>共10页&nbsp;</span>
+              </div>
             </div>
           </div>
         </div>
@@ -134,14 +155,92 @@ import TypeNav from "@comps/TypeNav";
 
 export default {
   name: "Search",
+  data() {
+    return {
+      options: {
+        category1Id: "",
+        category2Id: "",
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        order: "",
+        pageNo: 1,
+        pageSize: 5,
+        props: [],
+        trademark: "",
+      },
+    };
+  },
+  watch: {
+    $route() {
+      this.updateProductList();
+    },
+  },
   computed: {
     ...mapGetters(["goodsList"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
+    updateProductList() {
+      const { searchText: keyword } = this.$route.params;
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      } = this.$route.query;
+
+      const options = {
+        ...this.options,
+        keyword,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      };
+
+      this.options = options;
+
+      this.getProductList(options);
+    },
+    delKeyword() {
+      this.options.keyword = "";
+      this.$bus.$emit("clearKeyword");
+      this.$router.replace({
+        name: "search",
+        query: this.$route.query,
+      });
+    },
+    delCategory() {
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+
+      this.$router.replace({
+        name: "search",
+        params: this.$route.params,
+      });
+    },
+    addTrademark(trademark) {
+      this.options.trademark = trademark;
+      this.updateProductList();
+    },
+    delTrademark() {
+      this.options.trademark = "";
+      this.updateProductList();
+    },
+    addProp(prop) {
+      this.options.props.push(prop);
+      this.updateProductList();
+    },
+    delProp(index) {
+      this.options.props.splice(index, 1);
+      this.updateProductList();
+    },
   },
   mounted() {
-    this.getProductList();
+    this.updateProductList();
   },
   components: {
     SearchSelector,

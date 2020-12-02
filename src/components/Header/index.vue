@@ -38,7 +38,7 @@
             class="input-error input-xxlarge"
             v-model="searchText"
           />
-          <button class="sui-btn btn-xlarge btn-danger">搜索</button>
+          <button class="sui-btn btn-xlarge btn-danger" @click="clearText">搜索</button>
         </form>
       </div>
     </div>
@@ -64,8 +64,27 @@ export default {
           searchText,
         };
       }
-      this.$router.push(location);
+      const { categoryName } = this.$route.query;
+
+      if (categoryName) {
+        location.query = this.$route.query;
+      }
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
+    clearText() {
+      setTimeout(() => {
+        this.searchText = "";
+      });
+    },
+  },
+  mounted() {
+    this.$bus.$on("clearKeyword", () => {
+      this.searchText = "";
+    });
   },
 };
 </script>
