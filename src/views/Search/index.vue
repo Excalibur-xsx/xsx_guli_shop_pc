@@ -46,23 +46,47 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOrder('1') }" @click="setOrder('1')">
+                  <a>
+                    综合
+                    <i
+                      :class="{
+                        iconfont: true,
+                        'icon-direction-down': isAllDown, // 降序图标
+                        'icon-direction-up': !isAllDown, // 升序图标
+                      }"
+                    ></i>
+                  </a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isOrder('2') }" @click="setOrder('2')">
+                  <a>
+                    价格
+                    <span>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-up-filling': true,
+                          deactive: isOrder('2') && isPriceDown,
+                        }"
+                      ></i>
+                      <i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-down-filling': true,
+                          deactive: isOrder('2') && !isPriceDown,
+                        }"
+                      ></i>
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -109,39 +133,12 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted">
-                  <span>...</span>
-                </li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div>
-                <span>共10页&nbsp;</span>
-              </div>
-            </div>
-          </div>
+          <Pagination
+            :current-page="options.pageNo"
+            :pager-count="7"
+            :page-size="5"
+            :total="total"
+          />
         </div>
       </div>
     </div>
@@ -152,23 +149,27 @@
 import { mapGetters, mapActions } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 import TypeNav from "@comps/TypeNav";
+import Pagination from "@comps/Pagination";
 
 export default {
   name: "Search",
   data() {
     return {
       options: {
-        category1Id: "",
-        category2Id: "",
-        category3Id: "",
-        categoryName: "",
+        category1Id: "", 
+        category2Id: "", 
+        category3Id: "", 
+        categoryName: "", 
         keyword: "",
-        order: "",
-        pageNo: 1,
-        pageSize: 5,
-        props: [],
-        trademark: "",
+        order: "1:desc",
+        pageNo: 1, 
+        pageSize: 5, 
+        props: [], 
+        trademark: "", 
       },
+
+      isAllDown: true, 
+      isPriceDown: false, 
     };
   },
   watch: {
@@ -177,11 +178,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["goodsList"]),
+    ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
-    updateProductList() {
+    // 更新商品列表
+    updateProductList(pageNo = 1) {
       const { searchText: keyword } = this.$route.params;
       const {
         categoryName,
@@ -197,12 +199,14 @@ export default {
         category1Id,
         category2Id,
         category3Id,
+        pageNo,
       };
 
       this.options = options;
 
       this.getProductList(options);
     },
+    // 删除关键字
     delKeyword() {
       this.options.keyword = "";
       this.$bus.$emit("clearKeyword");
@@ -211,6 +215,7 @@ export default {
         query: this.$route.query,
       });
     },
+    // 删除分类
     delCategory() {
       this.options.categoryName = "";
       this.options.category1Id = "";
@@ -222,21 +227,62 @@ export default {
         params: this.$route.params,
       });
     },
+    // 添加品牌并更新数据
     addTrademark(trademark) {
+      if (this.options.trademark) return;
       this.options.trademark = trademark;
       this.updateProductList();
     },
+    // 删除品牌数据
     delTrademark() {
       this.options.trademark = "";
       this.updateProductList();
     },
+    // 添加品牌属性并更新数据
     addProp(prop) {
+      if (this.options.props.indexOf(prop) > -1) return;
       this.options.props.push(prop);
       this.updateProductList();
     },
+    // 删除品牌属性
     delProp(index) {
       this.options.props.splice(index, 1);
       this.updateProductList();
+    },
+    // 设置排序方式
+    setOrder(order) {
+      let [orderNum, orderType] = this.options.order.split(":");
+      if (orderNum === order) {
+        if (order === "1") {
+          this.isAllDown = !this.isAllDown;
+        } else {
+          this.isPriceDown = !this.isPriceDown;
+        }
+        orderType = orderType === "desc" ? "asc" : "desc";
+      } else {
+        if (order === "1") {
+          orderType = this.isAllDown ? "desc" : "asc";
+        } else {
+          this.isPriceDown = false;
+          orderType = "asc";
+        }
+      }
+
+      this.options.order = `${order}:${orderType}`;
+      this.updateProductList();
+    },
+    // 当每页条数发生变化触发
+    handleSizeChange(pageSize) {
+      this.options.pageSize = pageSize;
+      this.updateProductList();
+    },
+    // 当页码发生变化触发
+    handleCurrentChange(pageNo) {
+      this.updateProductList(pageNo);
+    },
+    // 判断order以 xxx 开头
+    isOrder(order) {
+      return this.options.order.indexOf(order) > -1;
     },
   },
   mounted() {
@@ -245,6 +291,7 @@ export default {
   components: {
     SearchSelector,
     TypeNav,
+    Pagination,
   },
 };
 </script>
@@ -351,11 +398,28 @@ export default {
               line-height: 18px;
 
               a {
-                display: block;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
                 cursor: pointer;
                 padding: 11px 15px;
                 color: #777;
                 text-decoration: none;
+
+                i {
+                  padding-left: 5px;
+                }
+                span {
+                  display: flex;
+                  flex-direction: column;
+                  line-height: 8px;
+                  i {
+                    font-size: 12px;
+                    &.deactive {
+                      color: rgba(255, 255, 255, 0.5);
+                    }
+                  }
+                }
               }
 
               &.active {
