@@ -14,16 +14,17 @@
           </ul>
           <ul class="fl sui-tag">
             <li class="with-x" v-show="options.keyword" @click="delKeyword">
-              关键词: {{ options.keyword }}
-              <i>×</i>
+              关键词: {{ options.keyword }}<i>×</i>
             </li>
-            <li class="with-x" v-show="options.categoryName" @click="delCategory">
-              分类名称: {{ options.categoryName }}
-              <i>×</i>
+            <li
+              class="with-x"
+              v-show="options.categoryName"
+              @click="delCategory"
+            >
+              分类名称: {{ options.categoryName }}<i>×</i>
             </li>
             <li class="with-x" v-show="options.trademark" @click="delTrademark">
-              品牌: {{ options.trademark.split(":")[1] }}
-              <i>×</i>
+              品牌: {{ options.trademark.split(":")[1] }}<i>×</i>
             </li>
 
             <li
@@ -32,8 +33,7 @@
               :key="prop"
               @click="delProp(index)"
             >
-              {{ prop.split(":")[2] }}: {{ prop.split(":")[1] }}
-              <i>×</i>
+              {{ prop.split(":")[2] }}: {{ prop.split(":")[1] }}<i>×</i>
             </li>
           </ul>
         </div>
@@ -47,16 +47,15 @@
             <div class="navbar-inner filter">
               <ul class="sui-nav">
                 <li :class="{ active: isOrder('1') }" @click="setOrder('1')">
-                  <a>
-                    综合
-                    <i
+                  <a
+                    >综合<i
                       :class="{
                         iconfont: true,
                         'icon-direction-down': isAllDown, // 降序图标
                         'icon-direction-up': !isAllDown, // 升序图标
                       }"
-                    ></i>
-                  </a>
+                    ></i
+                  ></a>
                 </li>
                 <li>
                   <a>销量</a>
@@ -97,9 +96,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
-                      <img :src="goods.defaultImg" />
-                    </a>
+                    <a href="item.html" target="_blank"
+                      ><img :src="goods.defaultImg"
+                    /></a>
                   </div>
                   <div class="price">
                     <strong>
@@ -112,21 +111,22 @@
                       target="_blank"
                       href="item.html"
                       title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                    >{{ goods.title }}</a>
+                      >{{ goods.title }}</a
+                    >
                   </div>
                   <div class="commit">
-                    <i class="command">
-                      已有
-                      <span>2000</span>人评价
-                    </i>
+                    <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
                     <a
                       href="success-cart.html"
                       target="_blank"
                       class="sui-btn btn-bordered btn-danger"
-                    >加入购物车</a>
-                    <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
+                      >加入购物车</a
+                    >
+                    <a href="javascript:void(0);" class="sui-btn btn-bordered"
+                      >收藏</a
+                    >
                   </div>
                 </div>
               </li>
@@ -134,11 +134,30 @@
           </div>
           <!-- 分页器 -->
           <Pagination
+            @current-change="handleCurrentChange"
             :current-page="options.pageNo"
             :pager-count="7"
             :page-size="5"
             :total="total"
           />
+          <!-- <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="options.pageNo"
+            :pager-count="7"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="5"
+            background
+            layout="
+              prev,
+              pager, 
+              next, 
+              total, 
+              sizes, 
+              jumper"
+            :total="total"
+          >
+          </el-pagination> -->
         </div>
       </div>
     </div>
@@ -160,8 +179,8 @@ export default {
         category2Id: "", 
         category3Id: "", 
         categoryName: "", 
-        keyword: "",
-        order: "1:desc",
+        keyword: "", 
+        order: "1:desc", 
         pageNo: 1, 
         pageSize: 5, 
         props: [], 
@@ -193,8 +212,8 @@ export default {
       } = this.$route.query;
 
       const options = {
-        ...this.options,
-        keyword,
+        ...this.options, 
+        keyword, 
         categoryName,
         category1Id,
         category2Id,
@@ -280,7 +299,7 @@ export default {
     handleCurrentChange(pageNo) {
       this.updateProductList(pageNo);
     },
-    // 判断order以 xxx 开头
+    // 判断order
     isOrder(order) {
       return this.options.order.indexOf(order) > -1;
     },

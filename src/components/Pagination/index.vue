@@ -1,18 +1,21 @@
 <template>
   <div class="pagination">
-    <button>上一页</button>
-    <button>1</button>
+    <button :disabled="myCurrentPage <= 1" @click="setCurrentPage(myCurrentPage - 1)">上一页</button>
+    <button :class="{ active: myCurrentPage === 1 }" @click="setCurrentPage(1)">1</button>
     <button v-show="startEnd.start > 2">...</button>
     <button
       v-for="item in mapBtnsCount"
       :key="item"
       @click="setCurrentPage(startEnd.start + item - 1)"
-    >
-      {{ startEnd.start + item - 1 }}
-    </button>
+      :class="{ active: myCurrentPage === startEnd.start + item - 1 }"
+    >{{ startEnd.start + item - 1 }}</button>
     <button v-show="startEnd.end < totalPages - 1">...</button>
-    <button v-show="totalPages > 1">{{ totalPages }}</button>
-    <button>下一页</button>
+    <button
+      :class="{ active: myCurrentPage === totalPages }"
+      v-show="totalPages > 1"
+      @click="setCurrentPage(totalPages)"
+    >{{ totalPages }}</button>
+    <button :disabled="myCurrentPage >= totalPages" @click="setCurrentPage(myCurrentPage + 1)">下一页</button>
     <button>总数：{{ total }}</button>
   </div>
 </template>
@@ -26,7 +29,7 @@ export default {
       type: Number,
       default: 1,
     },
-    // 显示按钮的数量
+    // 按钮的数量
     pagerCount: {
       type: Number,
       validator(val) {
@@ -50,43 +53,41 @@ export default {
       myCurrentPage: this.currentPage,
     };
   },
+  watch: {
+    // 让每次页码发生变化加载新数据
+    myCurrentPage(currentPage) {
+      this.$emit("current-change", currentPage);
+    },
+    currentPage(currentPage) {
+      this.myCurrentPage = currentPage;
+    },
+  },
   computed: {
-    // 总页数
     totalPages() {
-      // 向上取整
       return Math.ceil(this.total / this.pageSize);
     },
     startEnd() {
       const { myCurrentPage, pagerCount, totalPages } = this;
-
       const count = pagerCount - 2;
-      // 中间的一半
       const halfCount = Math.floor(count / 2);
-
       let start, end;
-      // 开始计算
       if (myCurrentPage >= totalPages - halfCount) {
         start = totalPages - count;
       } else {
         start = myCurrentPage - halfCount;
       }
-
       if (start <= 1) {
         start = 2;
       }
-
       end = start + count - 1;
-
       if (end >= totalPages) {
         end = totalPages - 1;
       }
-      // 返回计算结果
       return {
         start,
         end,
       };
     },
-    // 需要遍历的按钮数量
     mapBtnsCount() {
       const { start, end } = this.startEnd;
       const count = end - start + 1;
