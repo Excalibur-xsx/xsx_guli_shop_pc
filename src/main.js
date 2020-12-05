@@ -9,6 +9,7 @@ import "./mock/mockServer";
 
 import "./styles/reset.css";
 import "./styles/iconfont.css";
+import "swiper/swiper-bundle.min.css";
 
 Vue.config.productionTip = false;
 

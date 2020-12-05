@@ -24,12 +24,10 @@
 export default {
   name: "Pagination",
   props: {
-    // 当前页码
     currentPage: {
       type: Number,
       default: 1,
     },
-    // 按钮的数量
     pagerCount: {
       type: Number,
       validator(val) {
@@ -37,12 +35,10 @@ export default {
       },
       default: 7,
     },
-    // 每页条数
     pageSize: {
       type: Number,
       default: 10,
     },
-    // 总数
     total: {
       type: Number,
       default: 0,
@@ -63,10 +59,12 @@ export default {
     },
   },
   computed: {
+    // 总页数
     totalPages() {
       return Math.ceil(this.total / this.pageSize);
     },
     startEnd() {
+      // 收集所有参与计算的参数
       const { myCurrentPage, pagerCount, totalPages } = this;
       const count = pagerCount - 2;
       const halfCount = Math.floor(count / 2);
@@ -74,20 +72,28 @@ export default {
       if (myCurrentPage >= totalPages - halfCount) {
         start = totalPages - count;
       } else {
+        // 正常情况
         start = myCurrentPage - halfCount;
       }
       if (start <= 1) {
         start = 2;
       }
+
+      // 正常情况
       end = start + count - 1;
+
       if (end >= totalPages) {
         end = totalPages - 1;
       }
+
+      // 返回计算结果
       return {
         start,
         end,
       };
     },
+
+    // 需要遍历的按钮数量
     mapBtnsCount() {
       const { start, end } = this.startEnd;
       const count = end - start + 1;

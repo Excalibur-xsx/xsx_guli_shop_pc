@@ -14,17 +14,16 @@
           </ul>
           <ul class="fl sui-tag">
             <li class="with-x" v-show="options.keyword" @click="delKeyword">
-              关键词: {{ options.keyword }}<i>×</i>
+              关键词: {{ options.keyword }}
+              <i>×</i>
             </li>
-            <li
-              class="with-x"
-              v-show="options.categoryName"
-              @click="delCategory"
-            >
-              分类名称: {{ options.categoryName }}<i>×</i>
+            <li class="with-x" v-show="options.categoryName" @click="delCategory">
+              分类名称: {{ options.categoryName }}
+              <i>×</i>
             </li>
             <li class="with-x" v-show="options.trademark" @click="delTrademark">
-              品牌: {{ options.trademark.split(":")[1] }}<i>×</i>
+              品牌: {{ options.trademark.split(":")[1] }}
+              <i>×</i>
             </li>
 
             <li
@@ -33,7 +32,8 @@
               :key="prop"
               @click="delProp(index)"
             >
-              {{ prop.split(":")[2] }}: {{ prop.split(":")[1] }}<i>×</i>
+              {{ prop.split(":")[2] }}: {{ prop.split(":")[1] }}
+              <i>×</i>
             </li>
           </ul>
         </div>
@@ -47,15 +47,16 @@
             <div class="navbar-inner filter">
               <ul class="sui-nav">
                 <li :class="{ active: isOrder('1') }" @click="setOrder('1')">
-                  <a
-                    >综合<i
+                  <a>
+                    综合
+                    <i
                       :class="{
                         iconfont: true,
                         'icon-direction-down': isAllDown, // 降序图标
                         'icon-direction-up': !isAllDown, // 升序图标
                       }"
-                    ></i
-                  ></a>
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a>销量</a>
@@ -96,9 +97,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="goods.defaultImg"
-                    /></a>
+                    <router-link :to="`/detail/${goods.id}`">
+                      <img :src="goods.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -107,26 +108,25 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    <router-link :to="`/detail/${goods.id}`">
+                      {{
+                      goods.title
+                      }}
+                    </router-link>
                   </div>
                   <div class="commit">
-                    <i class="command">已有<span>2000</span>人评价</i>
+                    <i class="command">
+                      已有
+                      <span>2000</span>人评价
+                    </i>
                   </div>
                   <div class="operate">
                     <a
                       href="success-cart.html"
                       target="_blank"
                       class="sui-btn btn-bordered btn-danger"
-                      >加入购物车</a
-                    >
-                    <a href="javascript:void(0);" class="sui-btn btn-bordered"
-                      >收藏</a
-                    >
+                    >加入购物车</a>
+                    <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
               </li>
@@ -157,7 +157,7 @@
               jumper"
             :total="total"
           >
-          </el-pagination> -->
+          </el-pagination>-->
         </div>
       </div>
     </div>
@@ -175,20 +175,20 @@ export default {
   data() {
     return {
       options: {
-        category1Id: "", 
-        category2Id: "", 
-        category3Id: "", 
-        categoryName: "", 
-        keyword: "", 
-        order: "1:desc", 
-        pageNo: 1, 
-        pageSize: 5, 
-        props: [], 
-        trademark: "", 
+        category1Id: "",
+        category2Id: "",
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        order: "1:desc",
+        pageNo: 1,
+        pageSize: 5,
+        props: [],
+        trademark: "",
       },
 
-      isAllDown: true, 
-      isPriceDown: false, 
+      isAllDown: true,
+      isPriceDown: false,
     };
   },
   watch: {
@@ -212,8 +212,8 @@ export default {
       } = this.$route.query;
 
       const options = {
-        ...this.options, 
-        keyword, 
+        ...this.options,
+        keyword,
         categoryName,
         category1Id,
         category2Id,
@@ -225,7 +225,6 @@ export default {
 
       this.getProductList(options);
     },
-    // 删除关键字
     delKeyword() {
       this.options.keyword = "";
       this.$bus.$emit("clearKeyword");

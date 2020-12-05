@@ -16,7 +16,6 @@
 
 <script>
 import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
-import "swiper/swiper-bundle.min.css";
 Swiper.use([Navigation, Pagination, Autoplay]);
 
 export default {
@@ -30,6 +29,7 @@ export default {
   watch: {
     carouselList() {
       if (this.swiper) return;
+
       this.$nextTick(() => {
         this.initSwiper();
       });
@@ -56,6 +56,7 @@ export default {
   },
   mounted() {
     if (!this.carouselList.length) return;
+
     this.initSwiper();
   },
 };
