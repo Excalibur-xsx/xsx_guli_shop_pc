@@ -5,7 +5,12 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="$store.state.user.name">
+            <span>{{ $store.state.user.name }}</span>
+            &nbsp;
+            <button>退出</button>
+          </p>
+          <p v-else>
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
@@ -13,7 +18,7 @@
         </div>
         <div class="typeList">
           <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
+          <router-link to="/shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
@@ -38,7 +43,15 @@
             class="input-error input-xxlarge"
             v-model="searchText"
           />
-          <button class="sui-btn btn-xlarge btn-danger" @click="clearText">搜索</button>
+          <!-- 
+            问题：点击搜索，路径出现问号（原因是提交了表单）
+            1. button 按钮如果没有type 那么在表单中 默认type就是submit
+              此时会提交表单，事件就绑定在form上
+                @submit.prevent="search"
+            2. 不用form表单
+                @click="search"
+          -->
+          <button class="sui-btn btn-xlarge btn-danger">搜索</button>
         </form>
       </div>
     </div>
@@ -50,35 +63,37 @@ export default {
   name: "Header",
   data() {
     return {
+      // 搜索的内容
       searchText: "",
     };
   },
   methods: {
     search() {
+      // 获取搜索的数据
       const { searchText } = this;
+      // 编程式导航
       const location = {
         name: "search",
       };
+
       if (searchText) {
         location.params = {
           searchText,
         };
       }
+
+      // 添加query参数
       const { categoryName } = this.$route.query;
 
       if (categoryName) {
         location.query = this.$route.query;
       }
+
       if (this.$route.name === "search") {
         this.$router.replace(location);
       } else {
         this.$router.push(location);
       }
-    },
-    clearText() {
-      setTimeout(() => {
-        this.searchText = "";
-      });
     },
   },
   mounted() {

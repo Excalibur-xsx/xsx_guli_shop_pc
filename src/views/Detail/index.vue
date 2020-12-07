@@ -89,11 +89,15 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <el-input-number
+                  class="input-number"
+                  v-model="skuNum"
+                  controls-position="right"
+                  :min="1"
+                  :max="100"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -344,15 +348,28 @@ export default {
   data() {
     return {
       currentImgIndex: 0,
+      skuNum: 1,
     };
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
   },
   methods: {
-    ...mapActions(["getProductDetail"]),
+    ...mapActions(["getProductDetail", "updateCartCount"]),
     updateCurrentImgIndex(index) {
       this.currentImgIndex = index;
+    },
+    // 加入购物车
+    async addCart() {
+      try {
+        await this.updateCartCount({
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum,
+        });
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   mounted() {
@@ -534,6 +551,22 @@ export default {
               position: relative;
               float: left;
               margin-right: 15px;
+              // 深度样式选择器 -- 选择子组件样式修改
+              // less /deep/
+              // css  >>>
+              // /deep/ .el-input-number {
+              //   width: 110px;
+              // }
+              // /deep/.el-input {
+              //   width: 30px;
+              // }
+              // /deep/ .el-input__inner {
+              //   width: 30px;
+              // }
+
+              // .input-number {
+              //   width: 150px;
+              // }
 
               .itxt {
                 width: 38px;
@@ -571,6 +604,7 @@ export default {
 
             .add {
               float: left;
+              margin-left: 100px;
 
               a {
                 background-color: #e1251b;

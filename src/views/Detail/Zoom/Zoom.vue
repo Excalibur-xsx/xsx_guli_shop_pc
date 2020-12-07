@@ -1,24 +1,61 @@
 <template>
   <div class="spec-preview">
-    <!-- 中图 -->
     <img :src="imgUrl" />
-    <!-- 和中图一样大小的div -->
-    <div class="event"></div>
-    <!-- 大图 -->
+    <div class="event" @mousemove="move" ref="event"></div>
+    <div class="mask" ref="mask"></div>
+
     <div class="big">
-      <img :src="bigImgUrl" />
+      <img :src="bigImgUrl" ref="bigImg" />
     </div>
-    <!-- 绿色的遮罩层 -->
-    <div class="mask"></div>
   </div>
 </template>
 
 <script>
+// 节流函数
+import throttle from "lodash/throttle";
+
 export default {
   name: "Zoom",
+
   props: {
-    imgUrl: String,
-    bigImgUrl: String,
+    imgUrl: String, // 中图的url
+    bigImgUrl: String, // 大图的url
+  },
+
+  mounted() {
+    this.maskWidth = this.$refs.event.clientWidth / 2;
+  },
+
+  methods: {
+    move: throttle(function (event) {
+      console.log("-----");
+
+      let left, top;
+      const maskDiv = this.$refs.mask;
+      const bigImg = this.$refs.bigImg;
+
+      const { offsetX, offsetY } = event;
+      const maskWidth = this.maskWidth;
+
+      left = offsetX - maskWidth / 2;
+      top = offsetY - maskWidth / 2;
+      if (left < 0) {
+        left = 0;
+      } else if (left > maskWidth) {
+        left = maskWidth;
+      }
+      if (top < 0) {
+        top = 0;
+      } else if (top > maskWidth) {
+        top = maskWidth;
+      }
+
+      maskDiv.style.left = left + "px";
+      maskDiv.style.top = top + "px";
+
+      bigImg.style.left = -2 * left + "px";
+      bigImg.style.top = -2 * top + "px";
+    }, 50),
   },
 };
 </script>
