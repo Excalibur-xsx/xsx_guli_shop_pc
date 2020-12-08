@@ -1,6 +1,7 @@
 // @ts-nocheck
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "../store";
 
 import Home from "../views/Home";
 import Login from "../views/Login";
@@ -18,23 +19,27 @@ const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 
 VueRouter.prototype.push = function (location, onComplete, onAbort) {
+	// 如果用户想处理失败
 	if (onComplete && onAbort) {
 		return push.call(this, location, onComplete, onAbort);
 	}
+	// 如果用户不处理失败
 	return push.call(this, location, onComplete, () => { });
 };
 
 VueRouter.prototype.replace = function (location, onComplete, onAbort) {
+	// 如果用户想处理失败
 	if (onComplete && onAbort) {
 		return replace.call(this, location, onComplete, onAbort);
 	}
+	// 如果用户不处理失败
 	return replace.call(this, location, onComplete, () => { });
 };
 
 // 安装插件
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
 	// 路由配置
 	routes: [
 		{
@@ -100,3 +105,15 @@ export default new VueRouter({
 		return { x: 0, y: 0 };
 	},
 });
+
+// 需要进行权限验证的地址
+const permissionPaths = ["/trade", "/pay", "/center"];
+// 路由全局前置守卫
+router.beforeEach((to, from, next) => {
+	if (permissionPaths.indexOf(to.path) > -1 && !store.state.user.token) {
+		return next("/login");
+	}
+	next();
+});
+
+export default router;

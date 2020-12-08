@@ -337,7 +337,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 import TypeNav from "@comps/TypeNav";
 import ImageList from "./ImageList/ImageList";
@@ -353,9 +353,13 @@ export default {
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),
+    ...mapState({
+      cartList: (state) => state.shopcart.cartList,
+    }),
   },
   methods: {
     ...mapActions(["getProductDetail", "updateCartCount"]),
+    // 更新选中图片的下标
     updateCurrentImgIndex(index) {
       this.currentImgIndex = index;
     },
@@ -366,6 +370,8 @@ export default {
           skuId: this.skuInfo.id,
           skuNum: this.skuNum,
         });
+
+        sessionStorage.setItem("cart", JSON.stringify(this.skuInfo));
         this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
       } catch (e) {
         console.log(e);

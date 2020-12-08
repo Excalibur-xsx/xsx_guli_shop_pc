@@ -1,7 +1,11 @@
 <template>
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(skuImage, index) in skuImageList" :key="skuImage.id">
+      <div
+        class="swiper-slide"
+        v-for="(skuImage, index) in skuImageList"
+        :key="skuImage.id"
+      >
         <img :src="skuImage.imgUrl" @click="updateCurrentImgIndex(index)" />
       </div>
     </div>

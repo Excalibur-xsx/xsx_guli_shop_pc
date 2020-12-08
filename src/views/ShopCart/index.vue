@@ -74,7 +74,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <a class="sum-btn" @click="submit">结算</a>
         </div>
       </div>
     </div>
@@ -107,10 +107,8 @@ export default {
     formatSkuNum(e) {
       let skuNum = +e.target.value.replace(/\D+/g, "");
       if (skuNum < 1) {
-        // 商品数量不能小于1
         skuNum = 1;
       } else if (skuNum > 10) {
-        // 商品数量不能大于库存
         skuNum = 10;
       }
       e.target.value = skuNum;
@@ -122,8 +120,10 @@ export default {
       this.updateCartCount({ skuId, skuNum: e.target.value - skuNum });
     },
     async updateCount(skuId, skuNum) {
-      // 更新商品
       await this.updateCartCount({ skuId, skuNum });
+    },
+    submit() {
+      this.$router.push("/trade");
     },
   },
   mounted() {
