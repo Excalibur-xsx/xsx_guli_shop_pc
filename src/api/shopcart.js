@@ -8,7 +8,7 @@ export const reqGetCartList = () => {
 	});
 };
 
-// 添加、减少购物车商品数量
+// 修改购物车商品数量
 export const reqUpdateCartCount = (skuId, skuNum) => {
 	return request({
 		method: "POST",
