@@ -2,7 +2,7 @@
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="carousel in carouselList" :key="carousel.id">
-        <img :src="carousel.imgUrl" />
+        <img v-lazy="carousel.imgUrl" />
       </div>
     </div>
     <!-- 如果需要分页器 -->
@@ -16,6 +16,7 @@
 
 <script>
 import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
+
 Swiper.use([Navigation, Pagination, Autoplay]);
 
 export default {
@@ -29,7 +30,6 @@ export default {
   watch: {
     carouselList() {
       if (this.swiper) return;
-
       this.$nextTick(() => {
         this.initSwiper();
       });
@@ -38,15 +38,18 @@ export default {
   methods: {
     initSwiper() {
       this.swiper = new Swiper(this.$refs.swiper, {
-        loop: true,
+        loop: true, // 循环模式选项
         autoplay: {
-          delay: 2000,
+          // 自动轮播
+          delay: 2000, // 轮播间隔时间
           disableOnInteraction: false,
         },
+        // 如果需要分页器
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
         },
+        // 如果需要前进后退按钮
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
@@ -56,7 +59,6 @@ export default {
   },
   mounted() {
     if (!this.carouselList.length) return;
-
     this.initSwiper();
   },
 };

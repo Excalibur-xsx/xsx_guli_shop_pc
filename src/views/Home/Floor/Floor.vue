@@ -5,11 +5,7 @@
         <h3 class="fl">{{ floor.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li
-              class="active"
-              v-for="(nav, index) in floor.navList"
-              :key="index"
-            >
+            <li class="active" v-for="(nav, index) in floor.navList" :key="index">
               <a :href="nav.url" data-toggle="tab">{{ nav.text }}</a>
             </li>
           </ul>
@@ -20,11 +16,9 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="(keyword, index) in floor.keywords" :key="index">
-                  {{ keyword }}
-                </li>
+                <li v-for="(keyword, index) in floor.keywords" :key="index">{{ keyword }}</li>
               </ul>
-              <img :src="floor.imgUrl" />
+              <img v-lazy="floor.imgUrl" />
             </div>
             <div class="floorBanner">
               <Carousel :carouselList="floor.carouselList" />
@@ -32,22 +26,22 @@
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[0]" />
+                <img v-lazy="floor.recommendList[0]" />
               </div>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[1]" />
+                <img v-lazy="floor.recommendList[1]" />
               </div>
             </div>
             <div class="split center">
-              <img :src="floor.bigImg" />
+              <img v-lazy="floor.bigImg" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[2]" />
+                <img v-lazy="floor.recommendList[2]" />
               </div>
               <div class="floor-conver-pit">
-                <img :src="floor.recommendList[3]" />
+                <img v-lazy="floor.recommendList[3]" />
               </div>
             </div>
           </div>

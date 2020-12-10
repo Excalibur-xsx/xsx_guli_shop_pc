@@ -3,44 +3,39 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store";
 
-import Home from "../views/Home";
-import Login from "../views/Login";
-import Register from "../views/Register";
-import Search from "../views/Search";
-import Detail from "../views/Detail";
-import AddCartSuccess from "../views/AddCartSuccess";
-import ShopCart from "../views/ShopCart";
-import Trade from "../views/Trade";
-import Pay from "../views/Pay";
-import PaySuccess from "../views/PaySuccess";
-import Center from "../views/Center";
+const Home = () => import(/* webpackChunkName: "Home" */"../views/Home");
+const Login = () => import(/* webpackChunkName: "Login" */"../views/Login");
+const Register = () => import(/* webpackChunkName: "Register" */"../views/Register");
+const Search = () => import(/* webpackChunkName: "Search" */"../views/Search");
+const Detail = () => import(/* webpackChunkName: "Detail" */"../views/Detail");
+const AddCartSuccess = () => import(/* webpackChunkName: "AddCartSuccess" */"../views/AddCartSuccess");
+const ShopCart = () => import(/* webpackChunkName: "ShopCart" */"../views/ShopCart");
+const Trade = () => import(/* webpackChunkName: "Trade" */"../views/Trade");
+const Pay = () => import(/* webpackChunkName: "Pay" */"../views/Pay");
+const PaySuccess = () => import(/* webpackChunkName: "PaySuccess" */"../views/PaySuccess");
+const Center = () => import(/* webpackChunkName: "Center" */"../views/Center");
 
 const push = VueRouter.prototype.push;
 const replace = VueRouter.prototype.replace;
 
 VueRouter.prototype.push = function (location, onComplete, onAbort) {
-	// 如果用户想处理失败
 	if (onComplete && onAbort) {
 		return push.call(this, location, onComplete, onAbort);
 	}
-	// 如果用户不处理失败
 	return push.call(this, location, onComplete, () => { });
 };
 
 VueRouter.prototype.replace = function (location, onComplete, onAbort) {
-	// 如果用户想处理失败
 	if (onComplete && onAbort) {
 		return replace.call(this, location, onComplete, onAbort);
 	}
-	// 如果用户不处理失败
 	return replace.call(this, location, onComplete, () => { });
 };
 
-// 安装插件
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-	// 路由配置
+	mode: "history",
 	routes: [
 		{
 			path: "/",

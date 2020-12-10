@@ -6,17 +6,19 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 const userTempId = getUserTempId();
+const prefix_url =
+	process.env.NODE_ENV === "development" ? "/" : "http://182.92.128.115/";
 
 const instance = axios.create({
-	baseURL: "/api",
-	headers: {},
+	baseURL: `${prefix_url}api`,
+	headers: {
+	},
 });
 
 // 设置请求拦截器
 instance.interceptors.request.use(
 	(config) => {
 		NProgress.start();
-
 		const token = store.state.user.token;
 		if (token) {
 			config.headers.token = token;
@@ -43,9 +45,7 @@ instance.interceptors.response.use(
 		// 功能失败
 		return Promise.reject(message);
 	},
-	// 响应失败
 	(error) => {
-		// 进度条结束
 		NProgress.done();
 		const message = error.message || "网络错误";
 		// 提示错误

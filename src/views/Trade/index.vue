@@ -3,16 +3,11 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div
-        class="address clearFix"
-        v-for="address in trade.userAddressList"
-        :key="address.id"
-      >
+      <div class="address clearFix" v-for="address in trade.userAddressList" :key="address.id">
         <span
           :class="{ username: true, selected: address.id === selectAddressId }"
           @click="selectAddressId = address.id"
-          >{{ address.consignee }}</span
-        >
+        >{{ address.consignee }}</span>
         <p>
           <span class="s1">{{ address.userAddress }}</span>
           <span class="s2">{{ address.phoneNum }}</span>
@@ -36,18 +31,12 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul
-          class="list clearFix"
-          v-for="detail in trade.detailArrayList"
-          :key="detail.id"
-        >
+        <ul class="list clearFix" v-for="detail in trade.detailArrayList" :key="detail.id">
           <li>
-            <img style="width: 150px" :src="detail.imgUrl" alt="" />
+            <img style="width: 150px" :src="detail.imgUrl" alt />
           </li>
           <li>
-            <p>
-              {{ detail.skuName }}
-            </p>
+            <p>{{ detail.skuName }}</p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
@@ -59,11 +48,7 @@
       </div>
       <div class="bbs">
         <h5>买家留言：</h5>
-        <textarea
-          placeholder="建议留言前先与商家沟通确认"
-          class="remarks-cont"
-          v-model="orderComment"
-        ></textarea>
+        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="orderComment"></textarea>
       </div>
       <div class="line"></div>
       <div class="bill">
@@ -75,10 +60,9 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b
-            ><i>{{ trade.totalNum }}</i
-            >件商品，总商品金额</b
-          >
+          <b>
+            <i>{{ trade.totalNum }}</i>件商品，总商品金额
+          </b>
           <span>¥{{ trade.totalAmount }}</span>
         </li>
         <li>
@@ -93,12 +77,14 @@
     </div>
     <div class="trade">
       <div class="price">
-        应付金额:<span>¥{{ trade.totalAmount }}</span>
+        应付金额:
+        <span>¥{{ trade.totalAmount }}</span>
       </div>
       <div class="receiveInfo">
         寄送至:
         <span>{{ selectAddress.userAddress }}</span>
-        收货人：<span>{{ selectAddress.consignee }}</span>
+        收货人：
+        <span>{{ selectAddress.consignee }}</span>
         <span>{{ selectAddress.phoneNum }}</span>
       </div>
     </div>
@@ -115,11 +101,12 @@ export default {
   name: "Trade",
   data() {
     return {
-      trade: {},
+      tarde: {},
       selectAddressId: -1,
       orderComment: "",
     };
   },
+
   computed: {
     selectAddress() {
       const {
@@ -134,7 +121,7 @@ export default {
   },
   methods: {
     async submit() {
-      const { tradeNo, consignee, detailArrayList } = this.trade;
+      const { tradeNo, consignee, detailArrayList } = this.tarde;
       const { phoneNum, userAddress } = this.selectAddress;
       // 提交订单
       const orderId = await reqSubmitOrder({
